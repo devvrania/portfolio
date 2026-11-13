@@ -1,5 +1,7 @@
 import { site, visible, type Project } from "@/content/site";
 import { KairoStage } from "@/components/kairo-stage";
+import { Splash } from "@/components/splash";
+import { RoleCycler } from "@/components/role-cycler";
 import { Section, Chip, DraftBadge, ButtonLink } from "@/components/ui";
 
 function ProjectCard({ p }: { p: Project }) {
@@ -45,6 +47,7 @@ export default function Home() {
 
   return (
     <>
+      <Splash />
       <header className="fixed inset-x-0 top-0 z-20 border-b border-line/60 bg-bg/70 backdrop-blur-md">
         <nav aria-label="Main" className="mx-auto flex h-14 max-w-5xl items-center justify-between px-6">
           <a href="#top" className="font-mono text-sm font-semibold">
@@ -59,22 +62,50 @@ export default function Home() {
       </header>
 
       <main id="top">
-        {/* Hero: Kairo's desk, live, filling most of the first screen. The intro only overlaps its faded bottom edge, so he stays in view. */}
-        <section aria-label="Introduction">
-          <div className="relative h-[82svh] max-h-[880px] min-h-[480px] overflow-hidden">
-            <KairoStage />
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-bg to-transparent" />
-          </div>
-          <div className="relative mx-auto -mt-16 max-w-5xl px-6 pb-8 md:-mt-20">
-            <p className="font-mono text-sm text-blossom">Hey, I&apos;m {site.name} 👋</p>
-            <h1 className="mt-3 max-w-2xl text-4xl font-semibold leading-tight tracking-tight md:text-5xl">
-              I build software that feels <span className="text-accent">thoughtful</span>.
-            </h1>
-            <p className="mt-4 max-w-xl text-base text-muted md:text-lg">{site.role}</p>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <ButtonLink href="#projects" primary>See my work</ButtonLink>
-              <ButtonLink href={site.links.linkedin}>LinkedIn</ButtonLink>
-              <ButtonLink href={site.links.github}>GitHub</ButtonLink>
+        {/* Hero: one screen tall, Kairo's desk filling it. Her name on the left and her role on the right frame him
+            along the bottom. The room keeps its own lighting: only a short fade at the very bottom (into the page)
+            and a soft dark patch right behind each text block, so the text reads without dimming the scene.
+            The text layer lets the mouse through (except the buttons), so he still follows the cursor and says hi. */}
+        <section aria-label="Introduction" className="relative h-[100svh] min-h-[620px] max-h-[1100px] overflow-hidden">
+          <KairoStage />
+          {/* bottom fade: on a phone the text stack covers the lower half, so fade more of it to give the text a calm
+              dark ground (his face stays clear above); on wide screens just a short fade into the page */}
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-bg via-bg/85 to-transparent md:h-1/4 md:via-bg/40" />
+
+          {/* Three blocks: who, what, where-to. On a wide screen "who" and the buttons stack on the left with "what" on
+              the right; on a phone they read top to bottom in source order: name, role, buttons. */}
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 mx-auto grid max-w-6xl gap-6 px-6 pb-10 md:grid-cols-2 md:items-end md:gap-x-8 md:pb-14">
+            {/* who */}
+            <div className="relative isolate md:col-start-1 md:row-start-1">
+              <div aria-hidden className="absolute -inset-x-20 -inset-y-14 -z-10 bg-[radial-gradient(closest-side,rgb(14_10_16/0.8),transparent)]" />
+              <p className="text-xl tracking-wide text-blossom md:text-2xl">Hello! I&apos;m</p>
+              <h1 className="mt-1 text-5xl font-semibold uppercase leading-[0.95] tracking-wide md:text-6xl lg:text-7xl 2xl:text-8xl">
+                {/* first name leads; the surname sits under it, smaller and letter-spaced out to about the same width */}
+                <span className="block">{site.name}</span>
+                <span className="mt-1 block text-[0.6em] tracking-[0.32em] text-ink/80">{site.fullName.split(" ").slice(1).join(" ")}</span>
+              </h1>
+              <p className="mt-5 max-w-md text-lg text-ink/85 md:text-xl">
+                I build software that feels <span className="text-accent">thoughtful</span>.
+              </p>
+            </div>
+
+            {/* right: what. The outlined word behind rolls through the kinds of engineering she does (Software,
+                Full-Stack, Backend, AI) and fades downward; "ENGINEER" stays solid over its lower half */}
+            {/* about a quarter smaller than her name so RANIA leads; sits a little higher and further right, clear of the mug */}
+            <p className="relative isolate md:col-start-2 md:row-span-2 md:row-start-1 md:mb-10 md:self-end md:justify-self-end md:text-right lg:-mr-10 xl:-mr-20" aria-label="Software engineer: full-stack, backend and AI">
+              <span aria-hidden className="absolute -inset-x-16 -inset-y-12 -z-10 bg-[radial-gradient(closest-side,rgb(14_10_16/0.75),transparent)]" />
+              <RoleCycler className="text-3xl font-semibold uppercase leading-none tracking-wide text-transparent [-webkit-text-stroke:1.5px_var(--color-accent)] [mask-image:linear-gradient(to_bottom,black_25%,transparent_90%)] md:text-5xl lg:text-[3.4rem] 2xl:text-7xl" />
+              <span aria-hidden className="-mt-[0.45em] block text-3xl font-semibold uppercase leading-none tracking-wide md:text-5xl lg:text-[3.4rem] 2xl:text-7xl">
+                Engineer
+              </span>
+            </p>
+
+            {/* where to */}
+            {/* phone: the main action full width, the two profile links sharing a row under it; wide: one row */}
+            <div className="grid grid-cols-2 gap-3 md:col-start-1 md:row-start-2 md:flex md:flex-wrap">
+              <ButtonLink href="#projects" primary className="col-span-2 justify-center">See my work</ButtonLink>
+              <ButtonLink href={site.links.linkedin} className="justify-center">LinkedIn</ButtonLink>
+              <ButtonLink href={site.links.github} className="justify-center">GitHub</ButtonLink>
             </div>
           </div>
         </section>

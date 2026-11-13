@@ -35,3 +35,41 @@ body {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 }
+
+/* Blinking terminal caret in the Kairo loader */
+@keyframes kairo-blink { 50% { opacity: 0; } }
+.kairo-caret { animation: kairo-blink 1s steps(1) infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .kairo-caret { animation: none; }
+}
+
+/* Splash screen: no scrolling behind it; skipped entirely on repeat visits in the same session */
+html[data-splash="on"]:has(#splash) body { overflow: hidden; }  /* only pages that render the splash (the home page) */
+html[data-splash="seen"] #splash { display: none; }
+
+/* Splash progress bar: eases toward 90% from first paint, on the compositor, so it keeps moving even while
+   Kairo's iframe is busy on the main thread. Roughly matches the `shown` estimate in splash.tsx. */
+@keyframes splash-creep {
+  from { transform: scaleX(0.03); }
+  to { transform: scaleX(0.9); }
+}
+.splash-creep { animation: splash-creep 7.5s cubic-bezier(0.15, 0.6, 0.3, 1) forwards; }
+
+/* 404 page: Kairo bobs gently while cherry petals drift down */
+@keyframes kairo-bob {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-8px) rotate(2deg); }
+}
+.kairo-bob { animation: kairo-bob 3.2s ease-in-out infinite; }
+
+@keyframes petal-fall {
+  0% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translate3d(60px, 110vh, 0) rotate(540deg); opacity: 0.2; }
+}
+.petal { animation: petal-fall linear infinite both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .kairo-bob, .petal { animation: none; }
+  .petal { display: none; }
+}

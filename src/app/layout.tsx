@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { site } from "@/content/site";
+import { splashScript } from "@/components/splash";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -27,8 +28,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-      <body className="min-h-full font-sans">{children}</body>
+    // data-splash: "on" until the splash leaves; the inline script sets "seen" on repeat visits, so the attribute differs from the server HTML
+    <html lang="en" data-splash="on" suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: splashScript }} />
+        <noscript><style>{`#splash{display:none}`}</style></noscript>
+      </head>
+      <body className="min-h-full font-sans">
+        {children}
+      </body>
     </html>
   );
 }
