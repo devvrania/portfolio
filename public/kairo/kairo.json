@@ -1,0 +1,67 @@
+{
+  "name": "Kairo",
+  "nameMeaning": {
+    "arabic": "From القاهرة (al-Qāhirah, Cairo): \"the victorious one\", \"conqueror\"",
+    "japanese": "回路 (kairo): \"circuit\""
+  },
+  "role": "Rania's coding companion",
+  "personality": "Calm, focused late-night coder. Warm toward visitors, a little playful.",
+  "model": {
+    "file": "model/kairo.vrm",
+    "format": "VRM 0.x",
+    "source": "AvatarSample_C by VRoid Project (pixiv)",
+    "sourceUrl": "https://hub.vroid.com/characters/1248981995540129234/models/8640547963669442173",
+    "license": "VRoid Hub license: avatar use by anyone, modification, redistribution and commercial use allowed; credit not required",
+    "licenseUrl": "https://hub.vroid.com/license?allowed_to_use_user=everyone&characterization_allowed_user=everyone&corporate_commercial_use=allow&credit=unnecessary&modification=allow&personal_commercial_use=profit&redistribution=allow&sexual_expression=allow&version=1&violent_expression=allow"
+  },
+  "theme": {
+    "background": "#0e0a10",
+    "panel": "#140e14",
+    "text": "#e6ebf3",
+    "muted": "#8e98aa",
+    "accent": "#ff3b5c",
+    "cityGlow": "#e7c3e0",
+    "monitorGlow": "#cdbfff",
+    "moonLamp": "#ffa77a",
+    "neon": "#ff3b6b",
+    "blossom": "#f4a6c0"
+  },
+  "rig": {
+    "eyeYawDeg": 16,
+    "eyePitchUpDeg": 9,
+    "eyePitchDownDeg": 11,
+    "headYawMaxDeg": 60,
+    "headPitchDeg": [
+      -30,
+      25
+    ],
+    "neckHeadSplit": [
+      0.4,
+      0.6
+    ],
+    "idleLookAtScreenAfterSec": 4
+  },
+  "expressions": {
+    "default": "relaxed",
+    "available": [
+      "neutral",
+      "relaxed",
+      "happy",
+      "Surprised",
+      "blink",
+      "blinkLeft",
+      "blinkRight",
+      "aa",
+      "ih",
+      "ou",
+      "ee",
+      "oh"
+    ]
+  },
+  "greetings": [
+    "Hey there! I'm Kairo, Rania's little digital sidekick. Welcome to her world!",
+    "Kairo. Born to conquer, wired to create.",
+    "Rania's code is on the screen. I'm just the one typing it.",
+    "Late-night commit incoming. Rania ships, I keep her company."
+  ]
+}
