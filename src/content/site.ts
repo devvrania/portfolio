@@ -14,7 +14,8 @@ export type Project = {
   highlights: string[];
   stack: string[];
   links: Link[];
-  image?: string;   // path under /public
+  image?: string;   // screenshot of the project's site, under /public; shown in a browser frame with the first link's address
+  video?: string;   // optional short muted loop shown in that frame instead (the screenshot becomes its still frame)
   draft?: boolean;
 };
 
@@ -38,23 +39,26 @@ const projects: Project[] = [
       'Designed the daily pipeline that sanitizes, normalizes, standardizes and scores scraped data, with retries, failure handling and rate-limit management',
       'Built the supply team’s admin dashboard to review, approve and edit listings, manage leads and monitor scrapers',
       'Integrated brokerage partners to ingest for-sale listings, with automated broker notifications and lead tracking when buyers show interest',
+      'Built CRM integrations for the broker and lead workflows',   // TODO: name the CRM(s) and what syncs, if you like
       'Mapbox geocoding and Resend for personalized automated email workflows',
     ],
-    stack: ['Next.js', 'NestJS', 'MongoDB', 'Supabase', 'AWS', 'Docker', 'Railway', 'Vercel', 'GitHub Actions'],
+    stack: ['Next.js', 'NestJS', 'MongoDB', 'CRM integrations', 'Supabase', 'AWS', 'Docker', 'Railway', 'Vercel', 'GitHub Actions'],
     links: [{ label: 'bizscout.com', href: 'https://bizscout.com' }],
+    image: '/images/projects/bizscout.jpg',
   },
   {
     name: 'Helou Firm – MyFileHR',
     kind: 'work',
-    summary: 'A full-stack HR platform for employee onboarding, leave management, feedback and organization-specific workflows.',
+    summary: 'A full-stack HR platform for employee onboarding, leave management, feedback and organization-specific workflows, with a RAG-powered HR assistant.',
     highlights: [
       'Built a multi-organization RAG chatbot with Firebase Genkit, Gemini and Firestore, serving 5+ organizations and 300+ employee records',
       'AI query routing that works out what is being asked and retrieves from that organization’s HR data and policies',
       'Role-based access control for admins, managers and employees, so AI answers only use data the asker is allowed to see',
       'Personalized questions about leave balances, feedback, employee details and company policy',
     ],
-    stack: ['React', 'Redux', 'Firebase', 'Node.js', 'Firebase Genkit', 'Gemini', 'Firestore'],
-    links: [{ label: 'heloufirm.com', href: 'https://heloufirm.com' }],
+    stack: ['RAG', 'Firebase Genkit', 'Gemini', 'React', 'Node.js', 'Redux', 'Firebase', 'Firestore'],
+    links: [{ label: 'heloufirm.com', href: 'https://www.heloufirm.com' }],   // the bare domain fails HTTPS; www works
+    image: '/images/projects/heloufirm.jpg',
   },
   {
     name: 'Rewaa',
@@ -65,7 +69,8 @@ const projects: Project[] = [
       'Integrated and maintained APIs between the frontend, backend and external systems',
     ],
     stack: ['Angular', 'Node.js', 'AWS', 'PostgreSQL', 'Docker'],
-    links: [{ label: 'rewaatech.com', href: 'https://rewaatech.com' }],
+    links: [{ label: 'rewaa.com', href: 'https://rewaa.com' }],   // rewaatech.com now redirects here (Arabic only)
+    image: '/images/projects/rewaa.jpg',
   },
   {
     name: 'Book Intelligence',
@@ -91,7 +96,8 @@ const projects: Project[] = [
     ],
     stack: ['three.js', 'three-vrm', 'JavaScript', 'WebGL'],
     links: [{ label: 'kairo.devvrania.com', href: 'https://kairo.devvrania.com/' }],
-    image: '/images/kairo-banner.jpg',
+    image: '/images/projects/kairo.jpg',
+    video: '/images/projects/kairo-loop.mp4',
   },
 ];
 

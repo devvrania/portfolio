@@ -10,7 +10,7 @@ const from = path.resolve(process.env.KAIRO_DIR ?? path.join(root, '..', 'kairo'
 const to = path.join(root, 'public', 'kairo');
 
 // only what the scene needs at runtime, plus the model's license
-const FILES = ['index.html', 'kairo.json', 'src', 'model/kairo.vrm', 'LICENSE-MODEL.md'];
+const FILES = ['index.html', 'kairo.json', 'src', 'model/kairo.vrm', 'LICENSE-MODEL.md', 'loader-avatar.jpg'];
 
 try { await stat(path.join(from, 'index.html')); }
 catch { console.error(`Kairo not found at ${from}. Set KAIRO_DIR to his repo.`); process.exit(1); }

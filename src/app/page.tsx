@@ -2,38 +2,123 @@ import { site, visible, type Project } from "@/content/site";
 import { KairoStage } from "@/components/kairo-stage";
 import { Splash } from "@/components/splash";
 import { RoleCycler } from "@/components/role-cycler";
+import { ProjectDetails } from "@/components/project-details";
+import { LoopVideo } from "@/components/loop-video";
 import { Section, Chip, DraftBadge, ButtonLink } from "@/components/ui";
 
-function ProjectCard({ p }: { p: Project }) {
+/**
+ * A screenshot of the project's live site in a small browser window: three dots and the address, so it reads as a
+ * real website at a glance. The whole preview links to the site.
+ */
+function SitePreview({ src, video, link, roomForClose = false, sizes }: { src: string; video?: string; link?: { label: string; href: string }; roomForClose?: boolean; sizes: string }) {
+  // each screenshot comes in two widths, name.jpg (1600px) and name-800.jpg; the browser picks by layout width and screen density
+  const small = src.replace(/\.jpg$/, "-800.jpg");
+  const frame = (
+    <>
+      <div className={`flex items-center gap-3 border-b border-line bg-panel-2 py-2 pl-3 ${roomForClose ? "pr-12" : "pr-3"}`}>
+        <span aria-hidden className="flex gap-1.5">
+          <span className="h-2 w-2 rounded-full bg-accent/80" />
+          <span className="h-2 w-2 rounded-full bg-blossom/60" />
+          <span className="h-2 w-2 rounded-full bg-line" />
+        </span>
+        {link && (
+          <span className="flex min-w-0 flex-1 items-center gap-1.5 truncate rounded-md bg-bg/70 px-2.5 py-1 font-mono text-[11px] text-muted">
+            <svg aria-hidden viewBox="0 0 16 16" className="h-2.5 w-2.5 shrink-0" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="7" width="10" height="7" rx="1.5" /><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" /></svg>
+            {link.label}
+          </span>
+        )}
+      </div>
+      <div className="aspect-[16/10] overflow-hidden">
+        {video ? (
+          <LoopVideo src={video} poster={src} className="h-full w-full object-cover object-top transition duration-500 group-hover/card:scale-[1.03] motion-reduce:group-hover/card:scale-100" />
+        ) : (
+        // eslint-disable-next-line @next/next/no-img-element -- static screenshot, already sized
+        <img src={src} srcSet={`${small} 800w, ${src} 1600w`} sizes={sizes} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover object-top transition duration-500 group-hover/card:scale-[1.03] motion-reduce:group-hover/card:scale-100" />
+        )}
+      </div>
+    </>
+  );
+  return link ? (
+    <a href={link.href} target="_blank" rel="noreferrer" aria-label={`Open ${link.label} (new tab)`} className="block border-b border-line">
+      {frame}
+    </a>
+  ) : (
+    <div className="border-b border-line">{frame}</div>
+  );
+}
+
+/** How many stack chips a card shows before collapsing the rest into "+N" (the full list is in Details). */
+const CHIPS = 5;
+
+/**
+ * A compact project card for the grid: name and link, a one-line summary and the main stack.
+ * "Details" opens the full write-up in a modal panel, so opening one never reshapes the grid.
+ * Cards in a row share a height, with Details pinned to the bottom so the toggles line up.
+ */
+function ProjectCard({ p, cols }: { p: Project; cols: number }) {
+  const extra = p.stack.length - CHIPS;
   return (
     <article
-      className={`overflow-hidden rounded-2xl border bg-panel ${p.draft ? "border-dashed border-blossom/40" : "border-line"} ${p.image ? "md:grid md:grid-cols-[1.1fr_1fr]" : ""}`}
+      className={`group/card flex flex-col overflow-hidden rounded-2xl border bg-panel transition duration-300 hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-[0_12px_40px_-12px_rgba(255,59,92,.25)] motion-reduce:hover:translate-y-0 ${p.draft ? "border-dashed border-blossom/40" : "border-line"}`}
     >
-      {p.image && (
-        // eslint-disable-next-line @next/next/no-img-element -- static project art
-        <img src={p.image} alt="" className="h-56 w-full object-cover object-[30%_center] md:h-full" />
-      )}
-      <div className="p-6 md:p-8">
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-          <h3 className="text-xl font-semibold">{p.name}</h3>
-          {p.links.map(l => (
-            <a key={l.href} href={l.href} target="_blank" rel="noreferrer" className="font-mono text-xs text-accent hover:underline">
-              {l.label} ↗
-            </a>
-          ))}
+      {p.image && <SitePreview src={p.image} video={p.video} link={p.links[0]} sizes={cols >= 3 ? "(min-width: 1024px) 20rem, (min-width: 768px) 45vw, 100vw" : "(min-width: 768px) 30rem, 100vw"} />}
+      <div className="flex flex-1 flex-col p-6">
+        <div className="flex items-start justify-between gap-4">
+          <h3 className="text-lg font-semibold leading-snug">{p.name}</h3>
           {p.draft && <DraftBadge />}
         </div>
-        <p className="mt-3 leading-relaxed text-muted">{p.summary}</p>
-        <ul className="mt-5 space-y-2 text-sm leading-relaxed text-muted">
-          {p.highlights.map(h => (
-            <li key={h} className="flex gap-3"><span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent" />{h}</li>
-          ))}
-        </ul>
-        <div className="mt-6 flex flex-wrap gap-2">{p.stack.map(s => <Chip key={s}>{s}</Chip>)}</div>
+        {p.links.length > 0 && (
+          <div className="mt-1 flex flex-wrap gap-x-4">
+            {p.links.map(l => (
+              <a key={l.href} href={l.href} target="_blank" rel="noreferrer" className="font-mono text-xs text-accent hover:underline">
+                {l.label} ↗<span className="sr-only"> (opens in a new tab)</span>
+              </a>
+            ))}
+          </div>
+        )}
+        <p className="mt-3 text-sm leading-relaxed text-muted">{p.summary}</p>
+        <div className="mt-5 flex flex-wrap gap-2">
+          {p.stack.slice(0, CHIPS).map(s => <Chip key={s}>{s}</Chip>)}
+          {extra > 0 && <Chip>+{extra}</Chip>}
+        </div>
+
+        <div className="mt-auto pt-5">
+          <ProjectDetails title={p.name}>
+            {p.image && <SitePreview src={p.image} video={p.video} link={p.links[0]} roomForClose sizes="(min-width: 768px) 44rem, 100vw" />}
+            <div className={`p-6 md:p-8 ${p.image ? "" : "pt-12"}`}>
+              <p className="font-mono text-xs uppercase tracking-widest text-muted">{p.kind === "work" ? "Client work" : "Personal project"}</p>
+              <h3 className="mt-2 text-2xl font-semibold tracking-tight">{p.name}</h3>
+              {p.links.map(l => (
+                <a key={l.href} href={l.href} target="_blank" rel="noreferrer" className="mr-4 mt-1 inline-block font-mono text-xs text-accent hover:underline">
+                  {l.label} ↗<span className="sr-only"> (opens in a new tab)</span>
+                </a>
+              ))}
+              <p className="mt-4 leading-relaxed text-muted">{p.summary}</p>
+              <h4 className="mt-7 font-mono text-xs uppercase tracking-widest text-muted">What I did</h4>
+              <ul className="mt-3 space-y-2.5 text-sm leading-relaxed text-ink/85">
+                {p.highlights.map(h => (
+                  <li key={h} className="flex gap-3"><span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent" />{h}</li>
+                ))}
+              </ul>
+              <h4 className="mt-7 font-mono text-xs uppercase tracking-widest text-muted">Stack</h4>
+              <div className="mt-3 flex flex-wrap gap-2">{p.stack.map(s => <Chip key={s}>{s}</Chip>)}</div>
+            </div>
+          </ProjectDetails>
+        </div>
       </div>
     </article>
   );
 }
+
+/**
+ * Grid for a group of cards: three across only when there are three or more, so two projects don't leave a gap.
+ * Cards share their row's height (Details lines up), unless the group mixes cards with and without a site preview:
+ * then each keeps its own height, so a text-only card isn't stretched into a tall empty box.
+ */
+const gridFor = (group: Project[]) => {
+  const mixed = group.some(p => p.image) && group.some(p => !p.image);
+  return `${group.length >= 3 ? "md:grid-cols-2 lg:grid-cols-3" : "md:grid-cols-2"} ${mixed ? "items-start" : ""}`;
+};
 
 export default function Home() {
   const projects = visible(site.projects);
@@ -170,13 +255,13 @@ export default function Home() {
           {work.length > 0 && (
             <>
               <h3 className="mb-5 font-mono text-xs uppercase tracking-widest text-muted">Client work</h3>
-              <div className="grid gap-6">{work.map(p => <ProjectCard key={p.name} p={p} />)}</div>
+              <div className={`grid gap-6 ${gridFor(work)}`}>{work.map(p => <ProjectCard key={p.name} p={p} cols={work.length} />)}</div>
             </>
           )}
           {personal.length > 0 && (
             <>
               <h3 className="mb-5 mt-14 font-mono text-xs uppercase tracking-widest text-muted">Personal projects</h3>
-              <div className="grid gap-6">{personal.map(p => <ProjectCard key={p.name} p={p} />)}</div>
+              <div className={`grid gap-6 ${gridFor(personal)}`}>{personal.map(p => <ProjectCard key={p.name} p={p} cols={personal.length} />)}</div>
             </>
           )}
         </Section>

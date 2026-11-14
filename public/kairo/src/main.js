@@ -30,12 +30,18 @@ import { DebugPanel } from './ui/debug.js';
 
 /* ---------- setup ---------- */
 const status = document.getElementById('status');
+const loadLine = document.getElementById('loadLine'), loadBar = document.getElementById('loadBar'), loadPct = document.getElementById('loadPct');
+const LOAD_LINES = ['waking up', 'warming up the keyboard', 'almost at his desk'];
 const profile = await fetch(PROFILE_URL).then(r => r.json());
 const { renderer, scene, camera, controls } = createStage();
 const clock = new THREE.Clock();
 
 const vrm = await loadAvatar(MODEL_URL, scene, p => {
-  if (p.total) status.textContent = `Loading Kairo… ${Math.round(p.loaded / p.total * 100)}%`;
+  if (!p.total) return;
+  const pct = Math.round(p.loaded / p.total * 100);
+  loadPct.textContent = `${pct}%`;
+  loadBar.style.transform = `scaleX(${Math.min(pct, 95) / 100})`;   // holds short of full until he's actually set up
+  loadLine.textContent = LOAD_LINES[Math.min(LOAD_LINES.length - 1, Math.floor(pct / 100 * LOAD_LINES.length))];
 }).catch(err => {
   status.textContent = 'Could not load the model. Run "npm start" and open the page it prints.';
   throw err;
@@ -97,8 +103,10 @@ renderer.domElement.addEventListener('click', e => {
   if (clickRay.intersectObject(vrm.scene, true).length) talk.poke(clock.elapsedTime);
 });
 
-status.remove();
 renderer.setAnimationLoop(tick);
+loadBar.style.transform = 'scaleX(1)';
+status.classList.add('done');
+setTimeout(() => status.remove(), 600);   // after the fade; the portfolio waits for #status to go before showing him
 setTimeout(() => talk.greet(clock.elapsedTime, 0), TIMING.greetDelay * 1000);
 
 /* ---------- every frame ---------- */
