@@ -162,13 +162,13 @@ export const site = {
 
   skills: [
     { group: 'Languages', items: ['TypeScript', 'JavaScript', 'SQL'] },
-    { group: 'Frontend', items: ['React', 'Next.js', 'Angular', 'Redux', 'Tailwind CSS', 'Material UI'] },
-    { group: 'Backend & APIs', items: ['Node.js', 'NestJS', 'Express', 'REST APIs', 'WebSockets', 'JWT auth', 'Mongoose', 'BullMQ', 'Redis'] },
-    { group: 'Databases', items: ['MongoDB', 'PostgreSQL', 'MySQL', 'Supabase'] },
-    { group: 'AI & Integrations', items: ['CRM integrations', 'LLM integrations', 'RAG', 'Firebase Genkit', 'Gemini', 'Firecrawl', 'Mapbox', 'Stripe', 'SendGrid', 'Resend'] },
-    { group: 'Cloud & DevOps', items: ['AWS', 'Docker', 'GitHub Actions', 'CI/CD', 'Vercel', 'Railway', 'Firebase'] },
+    { group: 'Frontend', items: ['React', 'Next.js', 'Angular', 'Redux', 'Tailwind CSS', 'Material UI', 'three.js'] },
+    { group: 'Backend & APIs', items: ['Node.js', 'NestJS', 'Express', 'REST APIs', 'WebSockets', 'JWT auth', 'Mongoose', 'BullMQ', 'Redis', 'Drizzle ORM'] },
+    { group: 'Databases', items: ['MongoDB', 'PostgreSQL', 'MySQL', 'Supabase', 'pgvector'] },
+    { group: 'AI & Integrations', items: ['CRM integrations', 'LLM integrations', 'RAG', 'Ollama', 'Firebase Genkit', 'Gemini', 'Firecrawl', 'Mapbox', 'Stripe', 'SendGrid', 'Resend'] },
+    { group: 'Cloud & DevOps', items: ['AWS', 'Docker', 'GitHub Actions', 'CI/CD', 'Vercel', 'Railway', 'Render', 'Firebase'] },
     { group: 'Architecture', items: ['Microservices', 'Event-driven', 'MVC', 'SOLID'] },
-    { group: 'Tools', items: ['Git', 'GitHub', 'GitLab', 'Jira', 'Linear'] },
+    { group: 'Tools', items: ['Git', 'GitHub', 'GitLab', 'Jira', 'Linear', 'Claude Code'] },
   ],
 
   projects,
