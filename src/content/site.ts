@@ -133,7 +133,7 @@ export const site = {
   handle: 'devvrania',
   role: 'Software Engineer · Full-Stack Developer · AI-Powered Apps',
   tagline: 'Building thoughtful digital experiences, scalable backend systems, and AI-powered applications.',
-  url: 'https://devvrania.vercel.app',   // TODO: your real domain once deployed
+  url: "https://www.devvrania.com",
 
   links: {
     github: 'https://github.com/devvrania',
