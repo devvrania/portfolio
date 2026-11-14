@@ -75,15 +75,19 @@ const projects: Project[] = [
   {
     name: 'Book Intelligence',
     kind: 'personal',
-    summary: 'A private, AI-powered library. Upload a PDF and ask questions; every answer comes only from the book, with citations to the exact chapter and page.',
+    summary: 'An open, AI-powered library. Upload a PDF and ask it anything: every answer comes only from the book, with citations to the exact chapter and page.',
     highlights: [
       'Hybrid RAG: pgvector similarity plus Postgres full-text search, and citations can only point at passages that were actually retrieved',
-      'Reader mode with highlight-to-ask, plus exact and semantic search inside a book',
-      'Background ingestion jobs, server-side auth and ownership checks, rate limits and prompt-injection defenses',
-      'Runs fully local on Ollama models, with OpenAI as a one-line switch',
+      'Background ingestion pipeline: PDF extraction, cleaning, chapter detection, structure-aware chunking and embeddings, resumable after failures',
+      'Runs on local Ollama models or any OpenAI-compatible API; the live demo uses Gemini’s free tier and waits out its per-minute limits',
+      'Deployed for free on Render, Neon (Postgres + pgvector) and Supabase Storage, with no accounts and no personal data stored',
     ],
-    stack: ['Next.js', 'TypeScript', 'PostgreSQL', 'pgvector', 'Drizzle', 'Ollama', 'RAG'],
-    links: [],   // TODO: add { label: 'Code', href: '…' } once the repo is public
+    stack: ['Next.js', 'TypeScript', 'RAG', 'pgvector', 'PostgreSQL', 'Drizzle', 'Gemini', 'Ollama'],
+    links: [
+      { label: 'books.devvrania.com', href: 'https://books.devvrania.com' },
+      { label: 'Code', href: 'https://github.com/devvrania/book-intelligence' },
+    ],
+    image: '/images/projects/book-intelligence.jpg',
   },
   {
     name: 'Kairo',
@@ -95,7 +99,10 @@ const projects: Project[] = [
       'The whole room is generated in code: canvas-painted window, IDE screen and keyboard backlight',
     ],
     stack: ['three.js', 'three-vrm', 'JavaScript', 'WebGL'],
-    links: [{ label: 'kairo.devvrania.com', href: 'https://kairo.devvrania.com/' }],
+    links: [
+      { label: 'kairo.devvrania.com', href: 'https://kairo.devvrania.com/' },
+      { label: 'Code', href: 'https://github.com/devvrania/kairo' },
+    ],
     image: '/images/projects/kairo.jpg',
     video: '/images/projects/kairo-loop.mp4',
   },
