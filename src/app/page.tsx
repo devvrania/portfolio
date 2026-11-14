@@ -70,7 +70,7 @@ export default function Home() {
           <KairoStage />
           {/* bottom fade: on a phone the text stack covers the lower half, so fade more of it to give the text a calm
               dark ground (his face stays clear above); on wide screens just a short fade into the page */}
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-bg via-bg/85 to-transparent md:h-1/4 md:via-bg/40" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-bg via-bg/85 to-transparent md:h-1/3 md:via-bg/60" />
 
           {/* Three blocks: who, what, where-to. On a wide screen "who" and the buttons stack on the left with "what" on
               the right; on a phone they read top to bottom in source order: name, role, buttons. */}
@@ -93,8 +93,8 @@ export default function Home() {
                 Full-Stack, Backend, AI) and fades downward; "ENGINEER" stays solid over its lower half */}
             {/* about a quarter smaller than her name so RANIA leads; sits a little higher and further right, clear of the mug */}
             <p className="relative isolate md:col-start-2 md:row-span-2 md:row-start-1 md:mb-10 md:self-end md:justify-self-end md:text-right lg:-mr-10 xl:-mr-20" aria-label="Software engineer: full-stack, backend and AI">
-              <span aria-hidden className="absolute -inset-x-16 -inset-y-12 -z-10 bg-[radial-gradient(closest-side,rgb(14_10_16/0.75),transparent)]" />
-              <RoleCycler className="text-3xl font-semibold uppercase leading-none tracking-wide text-transparent [-webkit-text-stroke:1.5px_var(--color-accent)] [mask-image:linear-gradient(to_bottom,black_25%,transparent_90%)] md:text-5xl lg:text-[3.4rem] 2xl:text-7xl" />
+              <span aria-hidden className="absolute -inset-x-20 -inset-y-16 -z-10 bg-[radial-gradient(closest-side,rgb(14_10_16/0.9),transparent)]" />
+              <RoleCycler className="text-3xl font-semibold uppercase leading-none tracking-wide text-transparent [-webkit-text-stroke:2px_var(--color-accent)] [mask-image:linear-gradient(to_bottom,black_40%,transparent_95%)] md:text-5xl lg:text-[3.4rem] 2xl:text-7xl" />
               <span aria-hidden className="-mt-[0.45em] block text-3xl font-semibold uppercase leading-none tracking-wide md:text-5xl lg:text-[3.4rem] 2xl:text-7xl">
                 Engineer
               </span>

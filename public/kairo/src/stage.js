@@ -19,9 +19,16 @@ export function createStage() {
   scene.fog = new THREE.Fog('#0e0a10', 5, 12);
 
   const camera = new THREE.PerspectiveCamera(34, innerWidth / innerHeight, 0.05, 50);
+  // On his own page visitors can drag to turn the view and scroll or pinch to zoom, within limits set once the
+  // camera is placed (main.js), so the room always reads right. No panning; the debug "orbit" switch lifts all that.
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
-  controls.enabled = false; // the debug panel's "Free camera" turns this on
+  controls.enablePan = false;
+  controls.zoomSpeed = 0.6;
+  controls.rotateSpeed = 0.5;
+  // Inside another page, wheel and swipes have to scroll that page, so no controls at all. Disconnecting also
+  // undoes the `touch-action: none` the controls put on the canvas, which would otherwise block touch scrolling.
+  if (FLAGS.embedded && !FLAGS.debug) controls.disconnect();
 
   scene.add(new THREE.HemisphereLight('#b58aa6', '#140c12', 0.8));
 

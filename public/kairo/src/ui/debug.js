@@ -6,7 +6,7 @@ import { FLAGS } from '../config.js';
  * and trigger breaks with S (stretch) and W (window).
  */
 export class DebugPanel {
-  constructor({ controls, onBreak }) {
+  constructor({ controls, visitorLimits, onBreak }) {
     this.gaze = 'cursor';     // 'cursor' | 'screen'
     this.expr = 'auto';       // 'auto' or a forced expression
     this.typingOn = true;
@@ -18,7 +18,9 @@ export class DebugPanel {
     this.group('gaze', v => { this.gaze = v; });
     this.group('expr', v => { this.expr = v; });
     this.toggle('typing', on => { this.typingOn = on; }, true);
-    this.toggle('orbit', on => { controls.enabled = on; }, false);
+    // free camera: lift the visitor limits and allow panning; off puts them back
+    const free = { minDistance: 0, maxDistance: Infinity, minAzimuthAngle: -Infinity, maxAzimuthAngle: Infinity, minPolarAngle: 0, maxPolarAngle: Math.PI };
+    this.toggle('orbit', on => { Object.assign(controls, on ? free : visitorLimits); controls.enablePan = on; }, false);
 
     addEventListener('keydown', e => {
       if (e.metaKey || e.ctrlKey || e.altKey) return;

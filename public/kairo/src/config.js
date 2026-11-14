@@ -7,9 +7,18 @@ const params = new URLSearchParams(location.search);
 export const FLAGS = {
   debug: params.has('debug'),     // show the debug panel on load
   capture: params.has('capture'), // keep frames readable so a recorder can copy the canvas
+  embedded: window.self !== window.top, // shown inside another page (e.g. the portfolio's hero)
 };
 
+
 export const DEG = Math.PI / 180;
+
+/**
+ * Visitor camera on his own page. Zoom: how far in and out, as a multiple of the starting distance.
+ * Turn: how far you can drag the view around him from where it starts, sideways and up/down.
+ */
+export const ZOOM = { min: 0.6, max: 1.4 };
+export const TURN = { side: 28 * DEG, up: 10 * DEG, down: 14 * DEG };
 
 /** Seconds. Ranges are [min, max] and picked at random. */
 export const TIMING = {

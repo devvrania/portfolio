@@ -90,7 +90,7 @@ const projects: Project[] = [
       'The whole room is generated in code: canvas-painted window, IDE screen and keyboard backlight',
     ],
     stack: ['three.js', 'three-vrm', 'JavaScript', 'WebGL'],
-    links: [{ label: 'Code', href: 'https://github.com/devvrania/kairo' }],
+    links: [{ label: 'kairo.devvrania.com', href: 'https://kairo.devvrania.com/' }],
     image: '/images/kairo-banner.jpg',
   },
 ];

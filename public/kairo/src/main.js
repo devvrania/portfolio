@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { MODEL_URL, PROFILE_URL, TIMING, DEG } from './config.js';
+import { MODEL_URL, PROFILE_URL, TIMING, DEG, ZOOM, TURN } from './config.js';
 import { createStage } from './stage.js';
 
 import { loadAvatar } from './avatar/loader.js';
@@ -59,6 +59,14 @@ const hips = rig.worldPos('hips'), head = rig.worldPos('head');
 camera.position.set(hips.x - 1.85, head.y + 0.2, hips.z + 1.0);
 controls.target.set(hips.x + 0.15, head.y - 0.16, hips.z + 0.3);
 camera.lookAt(controls.target);
+// visitor camera limits around that starting view (see TURN and ZOOM in config.js)
+const home = new THREE.Spherical().setFromVector3(camera.position.clone().sub(controls.target));
+const visitorLimits = {
+  minDistance: home.radius * ZOOM.min, maxDistance: home.radius * ZOOM.max,
+  minAzimuthAngle: home.theta - TURN.side, maxAzimuthAngle: home.theta + TURN.side,
+  minPolarAngle: home.phi - TURN.up, maxPolarAngle: home.phi + TURN.down,
+};
+Object.assign(controls, visitorLimits);
 controls.update();
 
 // animation layers on top of the seated pose
@@ -75,13 +83,16 @@ const overlay = new Overlay();
 const breaks = new Breaks();
 const talk = new Conversation(overlay, profile, t => breaks.end(t));
 const debug = new DebugPanel({
-  controls,
+  controls, visitorLimits,
   onBreak: kind => { breaks.begin(kind, clock.elapsedTime); pointer.forget(); },
 });
 
+// a click on him says hi; a drag that happens to end on him (turning the view) doesn't
 const clickRay = new THREE.Raycaster();
+let downAt = null;
+renderer.domElement.addEventListener('pointerdown', e => { downAt = { x: e.clientX, y: e.clientY }; });
 renderer.domElement.addEventListener('click', e => {
-  if (controls.enabled) return;
+  if (downAt && Math.hypot(e.clientX - downAt.x, e.clientY - downAt.y) > 5) return;
   clickRay.setFromCamera(new THREE.Vector2(e.clientX / innerWidth * 2 - 1, -(e.clientY / innerHeight) * 2 + 1), camera);
   if (clickRay.intersectObject(vrm.scene, true).length) talk.poke(clock.elapsedTime);
 });
