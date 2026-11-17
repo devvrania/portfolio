@@ -90,6 +90,24 @@ const projects: Project[] = [
     image: '/images/projects/book-intelligence.jpg',
   },
   {
+    name: 'Spendly',
+    kind: 'personal',
+    summary: 'A calm personal finance tracker for income and expenses in PKR across wallets and categories, built to go deep on database design and SQL.',
+    highlights: [
+      'Composite foreign keys, so the database itself guarantees every transaction uses the owner’s own wallet and a category of the matching type, even if the app code has a bug',
+      'CHECK constraints, case-insensitive unique names and balances always derived from transactions, never stored',
+      'Dashboard analytics in raw SQL (FILTER, window functions, generate_series), indexed and verified with EXPLAIN ANALYZE on 60k rows',
+      'HttpOnly cookie sessions with Argon2id, CSRF origin checks and rate limiting, covered by end-to-end tests',
+      'Next.js on Vercel proxies the NestJS API on Render through the same domain, so the session cookie stays first-party',
+    ],
+    stack: ['Next.js', 'NestJS', 'TypeScript', 'PostgreSQL', 'Prisma', 'Tailwind', 'Recharts'],
+    links: [
+      { label: 'spendly.devvrania.com', href: 'https://spendly.devvrania.com' },
+      { label: 'Code', href: 'https://github.com/devvrania/spendly' },
+    ],
+    image: '/images/projects/spendly.jpg',
+  },
+  {
     name: 'Kairo',
     kind: 'personal',
     summary: 'My 3D coding companion: a VRM character at a night desk who types, follows your cursor, takes stretch breaks and says hello when you click him. He’s the one at the top of this page.',
@@ -143,7 +161,7 @@ export const site = {
   },
 
   about: [
-    'I’m a software engineer with two years of production experience building scalable full-stack and backend applications with Node.js, NestJS, React, TypeScript and AWS.',
+    'I’m a software engineer with four years of production experience building scalable full-stack and backend applications with Node.js, NestJS, React, TypeScript and AWS.',
     'Most of my work is REST APIs, microservices and data-heavy systems, with a focus on performance and maintainability. Lately that includes AI-powered features built on LLMs and retrieval-augmented generation.',
     'I care about clean architecture, maintainable code, and the little details that make software better.',
   ],
@@ -162,13 +180,13 @@ export const site = {
 
   skills: [
     { group: 'Languages', items: ['TypeScript', 'JavaScript', 'SQL'] },
-    { group: 'Frontend', items: ['React', 'Next.js', 'Angular', 'Redux', 'Tailwind CSS', 'Material UI', 'three.js'] },
-    { group: 'Backend & APIs', items: ['Node.js', 'NestJS', 'Express', 'REST APIs', 'WebSockets', 'JWT auth', 'Mongoose', 'BullMQ', 'Redis', 'Drizzle ORM'] },
-    { group: 'Databases', items: ['MongoDB', 'PostgreSQL', 'MySQL', 'Supabase', 'pgvector'] },
+    { group: 'Frontend', items: ['React', 'Next.js', 'Angular', 'Redux', 'Tailwind CSS', 'Material UI', 'TanStack Query', 'three.js'] },
+    { group: 'Backend & APIs', items: ['Node.js', 'NestJS', 'Express', 'REST APIs', 'WebSockets', 'JWT auth', 'Mongoose', 'Prisma', 'Drizzle ORM', 'BullMQ', 'Redis'] },
+    { group: 'Databases', items: ['MongoDB', 'PostgreSQL', 'MySQL', 'Supabase', 'Neon', 'pgvector'] },
     { group: 'AI & Integrations', items: ['CRM integrations', 'LLM integrations', 'RAG', 'Ollama', 'Firebase Genkit', 'Gemini', 'Firecrawl', 'Mapbox', 'Stripe', 'SendGrid', 'Resend'] },
     { group: 'Cloud & DevOps', items: ['AWS', 'Docker', 'GitHub Actions', 'CI/CD', 'Vercel', 'Railway', 'Render', 'Firebase'] },
     { group: 'Architecture', items: ['Microservices', 'Event-driven', 'MVC', 'SOLID'] },
-    { group: 'Tools', items: ['Git', 'GitHub', 'GitLab', 'Jira', 'Linear', 'Claude Code'] },
+    { group: 'Tools', items: ['Git', 'GitHub', 'GitLab', 'Jira', 'Linear', 'Jest', 'Claude Code'] },
   ],
 
   projects,
