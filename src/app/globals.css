@@ -83,3 +83,100 @@ html[data-splash="seen"] #splash { display: none; }
   .kairo-bob, .petal { animation: none; }
   .petal { display: none; }
 }
+
+/* About cards: rise into view (staggered via inline transition-delay), lift on hover, cursor-following spotlight.
+   Hiding before the reveal only happens when scripting is on, so a card can never get stuck invisible. */
+.reveal-card {
+  position: relative;
+  transition: opacity 0.7s ease-out, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1), border-color 0.3s, box-shadow 0.3s;
+}
+@media (scripting: enabled) {
+  .reveal-card[data-reveal="pending"] { opacity: 0; transform: translateY(24px); }
+}
+.reveal-card[data-reveal="shown"]:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
+  box-shadow: 0 16px 48px -16px rgba(255, 59, 92, 0.3);
+}
+.spotlight-card { isolation: isolate; overflow: hidden; }
+.spotlight-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(280px circle at var(--spot-x, 50%) var(--spot-y, 50%), rgba(255, 59, 92, 0.12), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.spotlight-card:hover::before { opacity: 1; }
+/* Profile card: the avatar's ring warms up on hover */
+.reveal-card .avatar-ring { transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.4s; }
+.reveal-card:hover .avatar-ring { transform: scale(1.06); box-shadow: 0 0 0 2px var(--color-accent), 0 0 28px -4px rgba(255, 59, 92, 0.55); }
+@media (prefers-reduced-motion: reduce) {
+  .reveal-card, .reveal-card .avatar-ring { transition: border-color 0.3s, box-shadow 0.3s; }
+  .reveal-card[data-reveal="pending"] { opacity: 1; transform: none; }
+  .reveal-card[data-reveal="shown"]:hover, .reveal-card:hover .avatar-ring { transform: none; }
+}
+
+/* About text: the paragraphs rise in one after another when the section scrolls into view */
+@media (scripting: enabled) {
+  .about-text[data-reveal="pending"] > * { opacity: 0; }
+}
+.about-text[data-reveal="shown"] > * { animation: about-in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.about-text[data-reveal="shown"] > :nth-child(2) { animation-delay: 0.1s; }
+.about-text[data-reveal="shown"] > :nth-child(3) { animation-delay: 0.2s; }
+.about-text[data-reveal="shown"] > :nth-child(4) { animation-delay: 0.3s; }
+.about-text[data-reveal="shown"] > :nth-child(5) { animation-delay: 0.4s; }
+@keyframes about-in { from { opacity: 0; translate: 0 14px; } }
+@media (prefers-reduced-motion: reduce) {
+  .about-text[data-reveal="pending"] > * { opacity: 1; }
+  .about-text[data-reveal="shown"] > * { animation: none; }
+}
+
+/* Contact: the page's closing call to action gets a soft crimson glow in its top-right corner */
+.contact-card { background-image: radial-gradient(640px circle at 100% 0%, rgba(255, 59, 92, 0.1), transparent 60%); }
+
+/* Experience: the bullet points rise in one after another (each <li> carries --i); the current role's dot pulses */
+@media (scripting: enabled) {
+  .stagger-list[data-reveal="pending"] li { opacity: 0; }
+}
+.stagger-list[data-reveal="shown"] li {
+  animation: about-in 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+.timeline-ping { animation: timeline-ping 2.4s cubic-bezier(0, 0, 0.2, 1) infinite; }
+@keyframes timeline-ping { 75%, 100% { transform: scale(2.6); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .stagger-list[data-reveal="pending"] li { opacity: 1; }
+  .stagger-list[data-reveal="shown"] li { animation: none; }
+  .timeline-ping { display: none; }
+}
+
+/* Tech tags (skills, project cards, project details, experience): each row's tags pop in one after another when
+   it scrolls into view, and lift on hover.
+   The entrance uses `translate`/`scale` (animation) and the hover uses `transform` (transition), so they never fight. */
+.skill-chip {
+  display: inline-block;
+  transition: transform 0.2s ease-out, border-color 0.2s, color 0.2s, background-color 0.2s, box-shadow 0.2s;
+}
+.skill-chip:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--color-accent) 55%, transparent);
+  color: var(--color-ink);
+  background-color: color-mix(in srgb, var(--color-accent) 8%, var(--color-panel-2));
+  box-shadow: 0 6px 18px -8px rgba(255, 59, 92, 0.45);
+}
+@media (scripting: enabled) {
+  .skill-group[data-reveal="pending"] .skill-chip { opacity: 0; }
+}
+.skill-group[data-reveal="shown"] .skill-chip {
+  animation: chip-in 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(var(--i, 0) * 35ms);
+}
+@keyframes chip-in { from { opacity: 0; translate: 0 8px; scale: 0.94; } }
+@media (prefers-reduced-motion: reduce) {
+  .skill-group[data-reveal="pending"] .skill-chip { opacity: 1; }
+  .skill-group[data-reveal="shown"] .skill-chip { animation: none; }
+  .skill-chip:hover { transform: none; }
+}

@@ -126,6 +126,7 @@ const projects: Project[] = [
   },
 ];
 
+// **Text in double asterisks** in a role's points is highlighted (used for the measurable results).
 const experience: Role[] = [
   {
     title: 'Software Engineer',
@@ -135,10 +136,10 @@ const experience: Role[] = [
     points: [
       'Built and maintained production full-stack applications with Node.js, NestJS, React, Next.js and AWS, across multiple production deployments',
       'Designed scalable backend services and microservice architectures, integrating third-party APIs for business-critical workflows',
-      'Built an AI-powered RAG system with Firebase Genkit and LLMs for querying 300+ employee records and organization-specific HR data',
-      'Cut API response times by up to 30% with Redis caching, query optimization and better data access',
-      'Improved MongoDB and PostgreSQL query performance by up to 40% through indexing and query optimization',
-      'Reduced code complexity by 20% by refactoring legacy Node.js services',
+      'Built an AI-powered RAG system with Firebase Genkit and LLMs for querying **300+ employee records** and organization-specific HR data',
+      'Cut API response times by **up to 30%** with Redis caching, query optimization and better data access',
+      'Improved MongoDB and PostgreSQL query performance by **up to 40%** through indexing and query optimization',
+      'Reduced code complexity by **20%** by refactoring legacy Node.js services',
       'Worked with QA and DevOps to troubleshoot production issues and keep downtime low',
     ],
     stack: ['Node.js', 'NestJS', 'React', 'Next.js', 'AWS', 'Redis', 'MongoDB', 'PostgreSQL'],
@@ -160,10 +161,14 @@ export const site = {
     resume: '',  // '/resume.pdf' after adding a copy without your phone number to /public; empty hides the button
   },
 
+  /** Shown with a green dot in Contact, e.g. 'Open to full-time and freelance roles'. Empty hides it. */
+  availability: '',
+
+  // The first paragraph is shown larger as the lead. **Text in double asterisks** is highlighted.
   about: [
-    'I’m a software engineer with four years of production experience building scalable full-stack and backend applications with Node.js, NestJS, React, TypeScript and AWS.',
-    'Most of my work is REST APIs, microservices and data-heavy systems, with a focus on performance and maintainability. Lately that includes AI-powered features built on LLMs and retrieval-augmented generation.',
-    'I care about clean architecture, maintainable code, and the little details that make software better.',
+    'I’m a software engineer with **four years of production experience**, building scalable full-stack and backend applications with Node.js, NestJS, React, TypeScript and AWS.',
+    'Most of my work is **REST APIs, microservices and data-heavy systems** where performance matters. Lately that includes **AI features built on LLMs and retrieval-augmented generation**.',
+    'I care about clean architecture, readable code and the small details that make software feel right.',
   ],
 
   impact: [

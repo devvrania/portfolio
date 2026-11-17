@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 export function Section({ id, index, title, children }: { id: string; index: string; title: string; children: ReactNode }) {
   return (
@@ -12,9 +12,9 @@ export function Section({ id, index, title, children }: { id: string; index: str
   );
 }
 
-export function Chip({ children }: { children: ReactNode }) {
+export function Chip({ children, className = "", style }: { children: ReactNode; className?: string; style?: CSSProperties }) {
   return (
-    <span className="rounded-full border border-line bg-panel-2 px-3 py-1 font-mono text-xs text-muted">{children}</span>
+    <span style={style} className={`rounded-full border border-line bg-panel-2 px-3 py-1 font-mono text-xs text-muted ${className}`}>{children}</span>
   );
 }
 

@@ -5,6 +5,15 @@ import { RoleCycler } from "@/components/role-cycler";
 import { ProjectDetails } from "@/components/project-details";
 import { LoopVideo } from "@/components/loop-video";
 import { Section, Chip, DraftBadge, ButtonLink } from "@/components/ui";
+import { CountUp, RevealCard, RevealGroup } from "@/components/reveal";
+import { CopyEmail } from "@/components/copy-email";
+
+/** Position of a tag in its row, so the tags pop in one after another (see .skill-chip in globals.css). */
+const chipIndex = (n: number) => ({ "--i": n }) as React.CSSProperties;
+
+/** Renders **double-asterisk** spans in site copy as highlighted text. */
+const highlight = (text: string) =>
+  text.split(/\*\*(.+?)\*\*/g).map((part, i) => (i % 2 ? <strong key={i} className="font-medium text-ink">{part}</strong> : part));
 
 /**
  * A screenshot of the project's live site in a small browser window: three dots and the address, so it reads as a
@@ -77,10 +86,10 @@ function ProjectCard({ p, cols }: { p: Project; cols: number }) {
           </div>
         )}
         <p className="mt-3 text-sm leading-relaxed text-muted">{p.summary}</p>
-        <div className="mt-5 flex flex-wrap gap-2">
-          {p.stack.slice(0, CHIPS).map(s => <Chip key={s}>{s}</Chip>)}
-          {extra > 0 && <Chip>+{extra}</Chip>}
-        </div>
+        <RevealGroup className="skill-group mt-5 flex flex-wrap gap-2">
+          {p.stack.slice(0, CHIPS).map((s, n) => <Chip key={s} className="skill-chip" style={chipIndex(n)}>{s}</Chip>)}
+          {extra > 0 && <Chip className="skill-chip" style={chipIndex(CHIPS)}>+{extra}</Chip>}
+        </RevealGroup>
 
         <div className="mt-auto pt-5">
           <ProjectDetails title={p.name}>
@@ -101,7 +110,9 @@ function ProjectCard({ p, cols }: { p: Project; cols: number }) {
                 ))}
               </ul>
               <h4 className="mt-7 font-mono text-xs uppercase tracking-widest text-muted">Stack</h4>
-              <div className="mt-3 flex flex-wrap gap-2">{p.stack.map(s => <Chip key={s}>{s}</Chip>)}</div>
+              <RevealGroup className="skill-group mt-3 flex flex-wrap gap-2">
+                {p.stack.map((s, n) => <Chip key={s} className="skill-chip" style={chipIndex(n)}>{s}</Chip>)}
+              </RevealGroup>
             </div>
           </ProjectDetails>
         </div>
@@ -197,56 +208,97 @@ export default function Home() {
 
         <Section id="about" index={num("about")} title="About me">
           <div className="grid gap-10 md:grid-cols-[1fr_auto]">
-            <div className="space-y-5 text-lg leading-relaxed text-muted">
-              {site.about.map(p => <p key={p.slice(0, 24)}>{p}</p>)}
-              <p className="text-base">
-                The character at the top is <span className="text-ink">Kairo</span>, my 3D coding companion. Move your
-                cursor over his room and he&apos;ll follow it; click him and he&apos;ll say hi.
+            <RevealGroup className="about-text space-y-5 text-lg leading-relaxed text-muted">
+              {site.about.map((p, n) => (
+                <p key={p.slice(0, 24)} className={n === 0 ? "text-xl leading-relaxed text-ink/90 md:text-2xl md:leading-snug" : ""}>
+                  {highlight(p)}
+                </p>
+              ))}
+              <p className="flex gap-3 rounded-xl border border-line bg-panel/60 px-4 py-3 text-base">
+                <span aria-hidden className="mt-0.5 text-accent">✦</span>
+                <span>
+                  The character at the top is <a href="#top" className="text-ink underline decoration-accent/50 underline-offset-4 hover:decoration-accent">Kairo</a>,
+                  my 3D coding companion. Move your cursor over his room and he&apos;ll follow it; click him and he&apos;ll say hi.
+                </span>
               </p>
-            </div>
-            <aside className="h-fit rounded-2xl border border-line bg-panel p-6 md:w-72">
+            </RevealGroup>
+            <RevealCard as="aside" className="h-fit rounded-2xl border border-line bg-panel p-6 md:w-72">
               {/* eslint-disable-next-line @next/next/no-img-element -- small static avatar */}
-              <img src="/images/kairo-avatar.jpg" alt="" className="h-20 w-20 rounded-full ring-2 ring-accent/50" />
+              <img src="/images/kairo-avatar.jpg" alt="" className="avatar-ring h-20 w-20 rounded-full ring-2 ring-accent/50" />
               <p className="mt-5 font-semibold">{site.fullName}</p>
               <p className="text-sm text-muted">Software Engineer</p>
               <p className="mt-5 font-mono text-xs uppercase tracking-widest text-muted">Education</p>
               <p className="mt-2 font-semibold">{site.education.degree}</p>
               <p className="text-sm text-muted">{site.education.school}</p>
               <p className="mt-1 font-mono text-xs text-muted">{site.education.years}</p>
-            </aside>
+            </RevealCard>
           </div>
           <dl className="mt-12 grid gap-4 sm:grid-cols-3">
-            {site.impact.map(s => (
-              <div key={s.value + s.label} className="rounded-2xl border border-line bg-panel p-6">
+            {site.impact.map((s, i) => (
+              <RevealCard key={s.value + s.label} delay={i * 120} className="rounded-2xl border border-line bg-panel p-6">
                 <dt className="sr-only">{s.label}</dt>
                 <dd>
-                  <span className="block text-4xl font-semibold tracking-tight text-accent">{s.value}</span>
+                  <span className="block text-4xl font-semibold tracking-tight text-accent">
+                    <CountUp value={s.value} delay={i * 120 + 150} />
+                  </span>
                   <span className="mt-2 block text-sm leading-relaxed text-muted">{s.label}</span>
                 </dd>
-              </div>
+              </RevealCard>
             ))}
           </dl>
         </Section>
 
         {experience.length > 0 && (
           <Section id="experience" index={num("experience")} title="Where I've worked">
-            <ol className="relative space-y-10 border-l border-line pl-8">
-              {experience.map(r => (
-                <li key={`${r.company}-${r.period}`} className="relative">
-                  <span aria-hidden className="absolute -left-[37px] top-1.5 h-2.5 w-2.5 rounded-full bg-accent ring-4 ring-bg" />
-                  <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                    <h3 className="text-lg font-semibold">{r.title} <span className="text-muted">· {r.company}</span></h3>
-                    <span className="font-mono text-xs text-muted">{r.period}{r.location ? ` · ${r.location}` : ""}</span>
-                    {r.draft && <DraftBadge />}
-                  </div>
-                  <ul className="mt-4 space-y-2 text-sm leading-relaxed text-muted">
-                    {r.points.map(pt => (
-                      <li key={pt} className="flex gap-3"><span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent" />{pt}</li>
-                    ))}
-                  </ul>
-                  {r.stack && <div className="mt-5 flex flex-wrap gap-2">{r.stack.map(s => <Chip key={s}>{s}</Chip>)}</div>}
-                </li>
-              ))}
+            <ol className="relative space-y-8 pl-8">
+              {/* timeline: crimson at the latest role, fading into the background */}
+              <span aria-hidden className="absolute bottom-0 left-0 top-2 w-px bg-gradient-to-b from-accent/70 via-line to-transparent" />
+              {experience.map(r => {
+                const current = /present/i.test(r.period);
+                return (
+                  <li key={`${r.company}-${r.period}`} className="relative">
+                    <span aria-hidden className="absolute -left-[37px] top-7 grid h-2.5 w-2.5 place-items-center">
+                      {current && <span className="timeline-ping absolute h-full w-full rounded-full bg-accent" />}
+                      <span className="relative h-2.5 w-2.5 rounded-full bg-accent ring-4 ring-bg" />
+                    </span>
+                    <RevealCard className="rounded-2xl border border-line bg-panel p-6 md:p-7">
+                      <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-2">
+                        <div>
+                          <h3 className="text-lg font-semibold">{r.title}</h3>
+                          <p className="text-sm text-muted">
+                            <span className="font-medium text-ink/90">{r.company}</span>
+                            {r.location ? ` · ${r.location}` : ""}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {current && (
+                            <span className="rounded-full border border-accent/40 bg-accent/10 px-2.5 py-0.5 font-mono text-[11px] uppercase tracking-wider text-accent">
+                              Current
+                            </span>
+                          )}
+                          <span className="font-mono text-xs text-muted">{r.period}</span>
+                          {r.draft && <DraftBadge />}
+                        </div>
+                      </div>
+                      <RevealGroup className="stagger-list mt-5">
+                        <ul className="space-y-2.5 text-sm leading-relaxed text-muted">
+                          {r.points.map((pt, n) => (
+                            <li key={pt} className="flex gap-3" style={chipIndex(n)}>
+                              <span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent" />
+                              <span>{highlight(pt)}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </RevealGroup>
+                      {r.stack && (
+                        <RevealGroup className="skill-group mt-6 flex flex-wrap gap-2 border-t border-line pt-5">
+                          {r.stack.map((s, n) => <Chip key={s} className="skill-chip" style={chipIndex(n)}>{s}</Chip>)}
+                        </RevealGroup>
+                      )}
+                    </RevealCard>
+                  </li>
+                );
+              })}
             </ol>
           </Section>
         )}
@@ -269,27 +321,45 @@ export default function Home() {
         <Section id="skills" index={num("skills")} title="Tech I work with">
           <div className="grid gap-x-10 gap-y-8 sm:grid-cols-2">
             {site.skills.map(s => (
-              <div key={s.group}>
-                <h3 className="text-sm font-semibold text-ink">{s.group}</h3>
-                <div className="mt-3 flex flex-wrap gap-2">{s.items.map(i => <Chip key={i}>{i}</Chip>)}</div>
-              </div>
+              <RevealGroup key={s.group} className="skill-group">
+                <h3 className="flex items-center gap-2.5 text-sm font-semibold text-ink">
+                  <span aria-hidden className="h-3.5 w-1 rounded-full bg-accent" />
+                  {s.group}
+                  <span className="font-mono text-xs font-normal text-muted">{s.items.length}</span>
+                </h3>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {s.items.map((i, n) => (
+                    <Chip key={i} className="skill-chip" style={chipIndex(n)}>{i}</Chip>
+                  ))}
+                </div>
+              </RevealGroup>
             ))}
           </div>
         </Section>
 
         <Section id="contact" index={num("contact")} title="Let's build something">
-          <div className="rounded-2xl border border-line bg-panel p-8 md:p-12">
+          <RevealCard className="contact-card rounded-2xl border border-line bg-panel p-8 md:p-12">
+            {site.availability && (
+              <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs font-medium text-emerald-300">
+                <span aria-hidden className="relative grid h-2 w-2 place-items-center">
+                  <span className="timeline-ping absolute h-full w-full rounded-full bg-emerald-400" />
+                  <span className="relative h-2 w-2 rounded-full bg-emerald-400" />
+                </span>
+                {site.availability}
+              </p>
+            )}
             <p className="max-w-xl text-lg leading-relaxed text-muted">
               I&apos;m always happy to talk about full-stack work, AI-powered products, or a project you&apos;re planning.
               Email or LinkedIn both reach me.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               {site.links.email && <ButtonLink href={`mailto:${site.links.email}`} primary>{site.links.email}</ButtonLink>}
+              {site.links.email && <CopyEmail email={site.links.email} />}
               <ButtonLink href={site.links.linkedin} primary={!site.links.email}>LinkedIn</ButtonLink>
               <ButtonLink href={site.links.github}>GitHub</ButtonLink>
               {site.links.resume && <ButtonLink href={site.links.resume}>Résumé</ButtonLink>}
             </div>
-          </div>
+          </RevealCard>
         </Section>
       </main>
 
