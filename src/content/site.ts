@@ -79,8 +79,10 @@ const projects: Project[] = [
     highlights: [
       'Hybrid RAG: pgvector similarity plus Postgres full-text search, and citations can only point at passages that were actually retrieved',
       'Background ingestion pipeline: PDF extraction, cleaning, chapter detection, structure-aware chunking and embeddings, resumable after failures',
+      'Grounding check on every answer: an answer that cites nothing is regenerated with a stricter prompt, honest “not in this book” replies are labelled, and anything still unbacked carries a warning',
+      'Private chats without accounts: each browser gets an anonymous id, and the server only ever shows a visitor their own conversations',
       'Runs on local Ollama models or any OpenAI-compatible API; the live demo uses Gemini’s free tier and waits out its per-minute limits',
-      'Deployed for free on Render, Neon (Postgres + pgvector) and Supabase Storage, with no accounts and no personal data stored',
+      'Deployed for free on Render, Neon (Postgres + pgvector) and Supabase Storage, with no personal data stored',
     ],
     stack: ['Next.js', 'TypeScript', 'RAG', 'pgvector', 'PostgreSQL', 'Drizzle', 'Gemini', 'Ollama'],
     links: [
@@ -98,6 +100,7 @@ const projects: Project[] = [
       'CHECK constraints, case-insensitive unique names and balances always derived from transactions, never stored',
       'Dashboard analytics in raw SQL (FILTER, window functions, generate_series), indexed and verified with EXPLAIN ANALYZE on 60k rows',
       'HttpOnly cookie sessions with Argon2id, CSRF origin checks and rate limiting, covered by end-to-end tests',
+      'One-click live demo: every visitor gets their own pre-filled account, private to them and deleted after 24 hours',
       'Next.js on Vercel proxies the NestJS API on Render through the same domain, so the session cookie stays first-party',
     ],
     stack: ['Next.js', 'NestJS', 'TypeScript', 'PostgreSQL', 'Prisma', 'Tailwind', 'Recharts'],
