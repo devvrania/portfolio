@@ -2,7 +2,7 @@
  * Kairo's loading state, shared between the hero (which loads him) and the splash screen (which waits for him).
  *
  * phase: "loading" while the scene downloads, "ready" once he's at his desk, "failed" if the model didn't load,
- * "off" when this visitor gets the banner art instead (phones, data saver).
+ * "off" when this visitor gets the banner art instead (phones).
  */
 export type KairoPhase = "loading" | "ready" | "failed" | "off";
 export type KairoStatus = { phase: KairoPhase; progress: number };

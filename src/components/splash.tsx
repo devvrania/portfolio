@@ -5,8 +5,6 @@ import { kairoStatus, loadingLine } from "@/lib/kairo-status";
 
 /** Long enough to read as intentional rather than a flash; short enough not to feel like a wait. */
 const MIN_MS = 4000;
-/** On a slow connection, stop waiting for Kairo and show the site; Kairo fades into the hero whenever he arrives. */
-const MAX_MS = 10000;
 /** Matches the exit transition below. */
 const EXIT_MS = 700;
 const noop = () => () => {};
@@ -30,8 +28,10 @@ export function Splash() {
     return () => clearInterval(id);
   }, [seen]);
 
+  // Wait for Kairo to be fully in (or for his load to fail; see KairoStage), however long the download takes,
+  // so the site never opens on an empty hero with him still on his way
   const settled = status.phase !== "loading";
-  const leaving = elapsed >= MIN_MS && (settled || elapsed >= MAX_MS);
+  const leaving = elapsed >= MIN_MS && settled;
 
   useEffect(() => {
     if (!leaving) return;
@@ -52,7 +52,7 @@ export function Splash() {
   //   for a few seconds while he sets up his model; a CSS transform animation keeps running through that,
   //   where anything driven by JavaScript (including a percentage readout) would freeze.
   // - the real figure: Kairo's download progress, held below 100% until he's at his desk; or, with nothing to
-  //   wait for (phones, data saver, failed load), an even fill over the minimum time.
+  //   wait for (phones, failed load), an even fill over the minimum time.
   // Either way it's paced by the clock, so a fast load doesn't fill the bar and then sit there until MIN_MS.
   const timePct = Math.min(100, (elapsed / MIN_MS) * 100);
   const pct = Math.min(

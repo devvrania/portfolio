@@ -1,17 +1,21 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { FLAGS } from './config.js';
+import { FLAGS, LITE, LITE_MAX_PIXELS } from './config.js';
+
+/** Sharp up to 2x, and in LITE mode no more than LITE_MAX_PIXELS in total. */
+const pixelRatio = () => Math.min(devicePixelRatio, 2,
+  LITE ? Math.max(1, Math.sqrt(LITE_MAX_PIXELS / (innerWidth * innerHeight))) : Infinity);
 
 /** Renderer, scene, camera, lights and floor: the empty stage Kairo's room is built on. */
 export function createStage() {
   const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: FLAGS.capture });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setPixelRatio(pixelRatio());
   renderer.setSize(innerWidth, innerHeight);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
   renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.shadowMap.type = LITE ? THREE.PCFShadowMap : THREE.PCFSoftShadowMap;
   document.body.appendChild(renderer.domElement);
 
   const scene = new THREE.Scene();
@@ -35,7 +39,7 @@ export function createStage() {
   const moon = new THREE.DirectionalLight('#e7c3e0', 1.15);  // rose-tinted city light from the window side
   moon.position.set(2.5, 3, -1.5);
   moon.castShadow = true;
-  moon.shadow.mapSize.set(2048, 2048);
+  moon.shadow.mapSize.setScalar(LITE ? 1024 : 2048);
   Object.assign(moon.shadow.camera, { left: -2, right: 2, top: 2, bottom: -2 });
   moon.shadow.bias = -0.0005;
   scene.add(moon);
@@ -56,6 +60,7 @@ export function createStage() {
   addEventListener('resize', () => {
     camera.aspect = innerWidth / innerHeight;
     camera.updateProjectionMatrix();
+    renderer.setPixelRatio(pixelRatio());
     renderer.setSize(innerWidth, innerHeight);
   });
 

@@ -27,7 +27,7 @@ npm run sync:kairo                          # copies from ../kairo
 KAIRO_DIR=/path/to/kairo npm run sync:kairo # or from another checkout
 ```
 
-Run it again after changing Kairo. On screens narrower than 768px, or with data saver on, the hero shows the banner art instead of loading the 20 MB model.
+Run it again after changing Kairo. On screens narrower than 768px the hero shows the banner art instead of loading the 20 MB model (visitors can tap "Meet Kairo in 3D" to load it). On wider screens the splash stays up until Kairo is fully loaded.
 
 ## Deploy
 

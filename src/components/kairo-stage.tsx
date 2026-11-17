@@ -4,16 +4,17 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { kairoStatus } from "@/lib/kairo-status";
 
 const WIDE = "(min-width: 768px)";
+/** The splash waits for Kairo however long he takes, so a download that stops without erroring would hold it forever. */
+const STALL_MS = 30000;
 
-/** Big screens on a normal connection get the live scene; phones and data-saver keep the banner art. */
+/** Big screens always get the live scene (and the splash waits for it); phones keep the banner art. */
 function subscribe(onChange: () => void) {
   const mq = window.matchMedia(WIDE);
   mq.addEventListener("change", onChange);
   return () => mq.removeEventListener("change", onChange);
 }
 function wantsLive() {
-  const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
-  return window.matchMedia(WIDE).matches && !saveData;
+  return window.matchMedia(WIDE).matches;
 }
 
 /**
@@ -21,7 +22,7 @@ function wantsLive() {
  * The banner art sits underneath until he's in, then the live scene fades in over it.
  * Loading progress goes to `kairoStatus`, which the splash screen shows.
  *
- * Phones and data saver get the banner by default, with a "Meet Kairo in 3D" button that loads him on request,
+ * Phones get the banner by default, with a "Meet Kairo in 3D" button that loads him on request,
  * so nobody downloads the 20 MB model without choosing to.
  */
 export function KairoStage() {
@@ -38,6 +39,20 @@ export function KairoStage() {
   }, [live]);
   useEffect(() => () => clearTimeout(timer.current), []);
 
+  // Give up on Kairo (keep the banner, let the splash go) if his progress hasn't moved for STALL_MS.
+  // Slow is fine; only no progress at all counts. Errors are reported faster, through #status (see watch).
+  useEffect(() => {
+    if (!live) return;
+    let last = -1, since = Date.now();
+    const id = setInterval(() => {
+      const { phase, progress } = kairoStatus.get();
+      if (phase !== "loading") return clearInterval(id);
+      if (progress !== last) { last = progress; since = Date.now(); }
+      else if (Date.now() - since > STALL_MS) { kairoStatus.set({ phase: "failed" }); clearInterval(id); }
+    }, 1000);
+    return () => clearInterval(id);
+  }, [live]);
+
   // Kairo writes "Loading Kairo… 42%" into #status while the model downloads and removes it once he's in.
   // The iframe is same-origin, so read that rather than guessing.
   function watch() {
@@ -50,6 +65,7 @@ export function KairoStage() {
       frame.current?.contentDocument?.head.append(hide);
     }
     const poll = () => {
+      if (kairoStatus.get().phase !== "loading") return; // already settled, e.g. given up as stalled
       const doc = frame.current?.contentDocument;
       const status = doc?.getElementById("status");
       if (doc?.readyState === "complete" && !status) {
@@ -77,7 +93,7 @@ export function KairoStage() {
         className="absolute inset-0 h-full w-full object-cover object-[32%_center]"
       />
 
-      {/* banner-only visitors (phones, data saver): offer the live scene */}
+      {/* banner-only visitors (phones): offer the live scene */}
       {!auto && !optIn && phase !== "failed" && (
         <button
           type="button"

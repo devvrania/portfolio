@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { MODEL_URL, PROFILE_URL, TIMING, DEG, ZOOM, TURN } from './config.js';
+import { MODEL_URL, PROFILE_URL, TIMING, DEG, ZOOM, TURN, LITE, LITE_FPS } from './config.js';
 import { createStage } from './stage.js';
 
 import { loadAvatar } from './avatar/loader.js';
@@ -103,7 +103,14 @@ renderer.domElement.addEventListener('click', e => {
   if (clickRay.intersectObject(vrm.scene, true).length) talk.poke(clock.elapsedTime);
 });
 
-renderer.setAnimationLoop(tick);
+// LITE mode draws at LITE_FPS (the -2 ms lets a 60 Hz screen land on every second frame despite timer jitter)
+const frameMs = LITE ? 1000 / LITE_FPS - 2 : 0;
+let lastFrame = -Infinity;
+const loop = now => { if (now - lastFrame < frameMs) return; lastFrame = now; tick(); };
+// Only draw while he's on screen: embedded in a page, scrolling past him would otherwise keep the GPU busy and
+// make the rest of the page stutter. (Inside an iframe this observes against the top page's viewport.)
+new IntersectionObserver(([entry]) => renderer.setAnimationLoop(entry.isIntersecting ? loop : null))
+  .observe(renderer.domElement);
 loadBar.style.transform = 'scaleX(1)';
 status.classList.add('done');
 setTimeout(() => status.remove(), 600);   // after the fade; the portfolio waits for #status to go before showing him

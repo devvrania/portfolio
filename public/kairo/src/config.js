@@ -10,6 +10,15 @@ export const FLAGS = {
   embedded: window.self !== window.top, // shown inside another page (e.g. the portfolio's hero)
 };
 
+/**
+ * Phones and tablets: draw a lighter scene so he (and the page around him) stay smooth. Caps the pixels drawn per
+ * frame (on a phone the portfolio renders the room wider than the screen and crops it), uses simpler shadows and
+ * runs at 30 fps.
+ */
+export const LITE = matchMedia('(pointer: coarse)').matches;
+export const LITE_MAX_PIXELS = 1.5e6;
+export const LITE_FPS = 30;
+
 
 export const DEG = Math.PI / 180;
 

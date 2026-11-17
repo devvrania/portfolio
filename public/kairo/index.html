@@ -104,6 +104,20 @@
   <div class="note">D hides this panel · S stretch · W look outside</div>
   <div class="note">Model: AvatarSample_C by VRoid Project. Licensed for avatar use, redistribution and commercial use, credit not required.</div>
 </div>
+<script>
+  // If anything stops Kairo from coming in (a CDN import that won't download, an error while building his room),
+  // say so in #status. The portfolio watches for "Could not load" so it can stop waiting and keep its banner.
+  (() => {
+    const fail = () => {
+      const s = document.getElementById('status');
+      if (s && !s.classList.contains('done') && !s.textContent.startsWith('Could not load')) {
+        s.textContent = 'Could not load Kairo. Reload the page to try again.';
+      }
+    };
+    addEventListener('error', e => { if (e instanceof ErrorEvent || e.target?.tagName === 'SCRIPT') fail(); }, true);
+    addEventListener('unhandledrejection', fail);
+  })();
+</script>
 <script type="module" src="./src/main.js"></script>
 </body>
 </html>
