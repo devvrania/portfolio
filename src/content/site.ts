@@ -162,6 +162,7 @@ export const site = {
     linkedin: 'https://www.linkedin.com/in/devvrania',
     email: 'devv.rania@gmail.com',
     resume: '',  // '/resume.pdf' after adding a copy without your phone number to /public; empty hides the button
+    booking: 'https://cal.com/devvrania/15min',  // Cal.com event link: opens straight on the calendar; empty hides "Book a call"
   },
 
   /** Shown with a green dot in Contact, e.g. 'Open to full-time and freelance roles'. Empty hides it. */

@@ -7,6 +7,7 @@ import { LoopVideo } from "@/components/loop-video";
 import { Section, Chip, DraftBadge, ButtonLink } from "@/components/ui";
 import { CountUp, RevealCard, RevealGroup } from "@/components/reveal";
 import { CopyEmail } from "@/components/copy-email";
+import { BookCall } from "@/components/book-call";
 
 /** Position of a tag in its row, so the tags pop in one after another (see .skill-chip in globals.css). */
 const chipIndex = (n: number) => ({ "--i": n }) as React.CSSProperties;
@@ -350,10 +351,13 @@ export default function Home() {
             )}
             <p className="max-w-xl text-lg leading-relaxed text-muted">
               I&apos;m always happy to talk about full-stack work, AI-powered products, or a project you&apos;re planning.
-              Email or LinkedIn both reach me.
+              {site.links.booking
+                ? " Pick a time for a short call, or reach me by email or LinkedIn."
+                : " Email or LinkedIn both reach me."}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              {site.links.email && <ButtonLink href={`mailto:${site.links.email}`} primary>{site.links.email}</ButtonLink>}
+              {site.links.booking && <BookCall url={site.links.booking} primary>Book a call</BookCall>}
+              {site.links.email && <ButtonLink href={`mailto:${site.links.email}`} primary={!site.links.booking}>{site.links.email}</ButtonLink>}
               {site.links.email && <CopyEmail email={site.links.email} />}
               <ButtonLink href={site.links.linkedin} primary={!site.links.email}>LinkedIn</ButtonLink>
               <ButtonLink href={site.links.github}>GitHub</ButtonLink>
