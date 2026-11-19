@@ -8,6 +8,7 @@ import { Section, Chip, DraftBadge, ButtonLink } from "@/components/ui";
 import { CountUp, RevealCard, RevealGroup } from "@/components/reveal";
 import { CopyEmail } from "@/components/copy-email";
 import { BookCall } from "@/components/book-call";
+import { LocalTime } from "@/components/local-time";
 
 /** Position of a tag in its row, so the tags pop in one after another (see .skill-chip in globals.css). */
 const chipIndex = (n: number) => ({ "--i": n }) as React.CSSProperties;
@@ -262,7 +263,7 @@ export default function Home() {
                       {current && <span className="timeline-ping absolute h-full w-full rounded-full bg-accent" />}
                       <span className="relative h-2.5 w-2.5 rounded-full bg-accent ring-4 ring-bg" />
                     </span>
-                    <RevealCard className="rounded-2xl border border-line bg-panel p-6 md:p-7">
+                    <RevealCard className={`${current ? "edge-glow " : ""}rounded-2xl border border-line bg-panel p-6 md:p-7`}>
                       <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-2">
                         <div>
                           <h3 className="text-lg font-semibold">{r.title}</h3>
@@ -339,29 +340,34 @@ export default function Home() {
         </Section>
 
         <Section id="contact" index={num("contact")} title="Let's build something">
-          <RevealCard className="contact-card rounded-2xl border border-line bg-panel p-8 md:p-12">
-            {site.availability && (
-              <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs font-medium text-emerald-300">
-                <span aria-hidden className="relative grid h-2 w-2 place-items-center">
-                  <span className="timeline-ping absolute h-full w-full rounded-full bg-emerald-400" />
-                  <span className="relative h-2 w-2 rounded-full bg-emerald-400" />
-                </span>
-                {site.availability}
-              </p>
-            )}
-            <p className="max-w-xl text-lg leading-relaxed text-muted">
-              I&apos;m always happy to talk about full-stack work, AI-powered products, or a project you&apos;re planning.
-              {site.links.booking
-                ? " Pick a time for a short call, or reach me by email or LinkedIn."
-                : " Email or LinkedIn both reach me."}
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              {site.links.booking && <BookCall url={site.links.booking} primary>Book a call</BookCall>}
-              {site.links.email && <ButtonLink href={`mailto:${site.links.email}`} primary={!site.links.booking}>{site.links.email}</ButtonLink>}
-              {site.links.email && <CopyEmail email={site.links.email} />}
-              <ButtonLink href={site.links.linkedin} primary={!site.links.email}>LinkedIn</ButtonLink>
-              <ButtonLink href={site.links.github}>GitHub</ButtonLink>
-              {site.links.resume && <ButtonLink href={site.links.resume}>Résumé</ButtonLink>}
+          <RevealCard className="contact-card edge-glow rounded-2xl border border-line bg-panel p-8 md:p-12">
+            <div className="grid items-center gap-x-10 gap-y-8 md:grid-cols-[1fr_auto]">
+              <div>
+                {site.availability && (
+                  <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs font-medium text-emerald-300">
+                    <span aria-hidden className="relative grid h-2 w-2 place-items-center">
+                      <span className="timeline-ping absolute h-full w-full rounded-full bg-emerald-400" />
+                      <span className="relative h-2 w-2 rounded-full bg-emerald-400" />
+                    </span>
+                    {site.availability}
+                  </p>
+                )}
+                <p className="max-w-xl text-lg leading-relaxed text-muted">
+                  I&apos;m always happy to talk about full-stack work, AI-powered products, or a project you&apos;re planning.
+                  {site.links.booking
+                    ? " Pick a time for a short call, or reach me by email or LinkedIn."
+                    : " Email or LinkedIn both reach me."}
+                </p>
+              </div>
+              {site.localTime.timeZone && <LocalTime timeZone={site.localTime.timeZone} place={site.localTime.place} />}
+              <div className="flex flex-wrap gap-3 md:col-span-2">
+                {site.links.booking && <BookCall url={site.links.booking} primary>Book a call</BookCall>}
+                {site.links.email && <ButtonLink href={`mailto:${site.links.email}`} primary={!site.links.booking}>{site.links.email}</ButtonLink>}
+                {site.links.email && <CopyEmail email={site.links.email} />}
+                <ButtonLink href={site.links.linkedin} primary={!site.links.email}>LinkedIn</ButtonLink>
+                <ButtonLink href={site.links.github}>GitHub</ButtonLink>
+                {site.links.resume && <ButtonLink href={site.links.resume}>Résumé</ButtonLink>}
+              </div>
             </div>
           </RevealCard>
         </Section>

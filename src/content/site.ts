@@ -166,7 +166,9 @@ export const site = {
   },
 
   /** Shown with a green dot in Contact, e.g. 'Open to full-time and freelance roles'. Empty hides it. */
-  availability: '',
+  availability: 'Open to freelance work',
+  /** Contact's live local-time panel. Empty timeZone hides it. */
+  localTime: { timeZone: 'Asia/Karachi', place: 'Pakistan' },
 
   // The first paragraph is shown larger as the lead. **Text in double asterisks** is highlighted.
   about: [

@@ -82,9 +82,9 @@ export function BookCall({ url, children, primary = false }: { url: string; chil
       onClick={open}
       data-cal-fallback={blocked || undefined}
       className={
-        "group inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent " +
+        "group relative inline-flex items-center gap-2 overflow-hidden rounded-full px-5 py-2.5 text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent " +
         (primary
-          ? "bg-accent text-white shadow-[0_0_24px_rgba(255,59,92,.35)] hover:brightness-110"
+          ? "shine bg-accent text-white shadow-[0_0_24px_rgba(255,59,92,.35)] hover:brightness-110"
           : "border border-line bg-panel/80 text-ink backdrop-blur hover:border-accent/60")
       }
     >

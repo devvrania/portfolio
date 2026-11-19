@@ -137,6 +137,40 @@ html[data-splash="seen"] #splash { display: none; }
 /* Contact: the page's closing call to action gets a soft crimson glow in its top-right corner */
 .contact-card { background-image: radial-gradient(640px circle at 100% 0%, rgba(255, 59, 92, 0.1), transparent 60%); }
 
+/* Contact and the current role's Experience card: a crimson-to-blossom light travels slowly around the card's edge */
+@property --edge-angle { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
+.edge-glow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  pointer-events: none;
+  background: conic-gradient(from var(--edge-angle), transparent 0deg, #ff3b5c 50deg, #f4a6c0 90deg, transparent 140deg, transparent 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: edge-spin 7s linear infinite;
+}
+@keyframes edge-spin { to { --edge-angle: 360deg; } }
+
+/* "Book a call": a light sweeps across the button every few seconds */
+.shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.35) 50%, transparent 70%);
+  transform: translateX(-120%);
+  animation: shine 4.5s ease-in-out 1.5s infinite;
+}
+@keyframes shine { 0% { transform: translateX(-120%); } 30%, 100% { transform: translateX(120%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .edge-glow::after { animation: none; }
+  .shine::after { display: none; }
+}
+
 /* Experience: the bullet points rise in one after another (each <li> carries --i); the current role's dot pulses */
 @media (scripting: enabled) {
   .stagger-list[data-reveal="pending"] li { opacity: 0; }
