@@ -31,7 +31,7 @@ export type Role = {
 
 const projects: Project[] = [
   {
-    name: 'Bizscout',
+    name: 'Business Acquisition Marketplace',
     kind: 'work',
     summary: 'A business acquisition marketplace connecting buyers, sellers and brokers through centralized listings and broker management workflows.',
     highlights: [
@@ -43,11 +43,11 @@ const projects: Project[] = [
       'Mapbox geocoding and Resend for personalized automated email workflows',
     ],
     stack: ['Next.js', 'NestJS', 'MongoDB', 'CRM integrations', 'Supabase', 'AWS', 'Docker', 'Railway', 'Vercel', 'GitHub Actions'],
-    links: [{ label: 'bizscout.com', href: 'https://bizscout.com' }],
+    links: [],
     image: '/images/projects/bizscout.jpg',
   },
   {
-    name: 'Helou Firm – MyFileHR',
+    name: 'AI-Powered HR Platform',
     kind: 'work',
     summary: 'A full-stack HR platform for employee onboarding, leave management, feedback and organization-specific workflows, with a RAG-powered HR assistant.',
     highlights: [
@@ -57,11 +57,11 @@ const projects: Project[] = [
       'Personalized questions about leave balances, feedback, employee details and company policy',
     ],
     stack: ['RAG', 'Firebase Genkit', 'Gemini', 'React', 'Node.js', 'Redux', 'Firebase', 'Firestore'],
-    links: [{ label: 'heloufirm.com', href: 'https://www.heloufirm.com' }],   // the bare domain fails HTTPS; www works
+    links: [],
     image: '/images/projects/heloufirm.jpg',
   },
   {
-    name: 'Rewaa',
+    name: 'Retail Management Platform',
     kind: 'work',
     summary: 'A retail management platform, where I worked as a full-stack engineer on frontend features, backend services and API integrations.',
     highlights: [
@@ -69,7 +69,7 @@ const projects: Project[] = [
       'Integrated and maintained APIs between the frontend, backend and external systems',
     ],
     stack: ['Angular', 'Node.js', 'AWS', 'PostgreSQL', 'Docker'],
-    links: [{ label: 'rewaa.com', href: 'https://rewaa.com' }],   // rewaatech.com now redirects here (Arabic only)
+    links: [],
     image: '/images/projects/rewaa.jpg',
   },
   {

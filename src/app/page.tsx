@@ -6,7 +6,7 @@ import { ProjectDetails } from "@/components/project-details";
 import { LoopVideo } from "@/components/loop-video";
 import { Section, Chip, DraftBadge, ButtonLink } from "@/components/ui";
 import { CountUp, RevealCard, RevealGroup } from "@/components/reveal";
-import { CopyEmail } from "@/components/copy-email";
+import { EmailButton } from "@/components/copy-email";
 import { BookCall } from "@/components/book-call";
 import { LocalTime } from "@/components/local-time";
 
@@ -362,8 +362,7 @@ export default function Home() {
               {site.localTime.timeZone && <LocalTime timeZone={site.localTime.timeZone} place={site.localTime.place} />}
               <div className="flex flex-wrap gap-3 md:col-span-2">
                 {site.links.booking && <BookCall url={site.links.booking} primary>Book a call</BookCall>}
-                {site.links.email && <ButtonLink href={`mailto:${site.links.email}`} primary={!site.links.booking}>{site.links.email}</ButtonLink>}
-                {site.links.email && <CopyEmail email={site.links.email} />}
+                {site.links.email && <EmailButton email={site.links.email} primary={!site.links.booking} />}
                 <ButtonLink href={site.links.linkedin} primary={!site.links.email}>LinkedIn</ButtonLink>
                 <ButtonLink href={site.links.github}>GitHub</ButtonLink>
                 {site.links.resume && <ButtonLink href={site.links.resume}>Résumé</ButtonLink>}
